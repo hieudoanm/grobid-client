@@ -1,0 +1,9 @@
+.turbo/
+node_modules/
+
+# Secrets
+.env
+.env.local
+*.pem
+*.key
+secrets/
