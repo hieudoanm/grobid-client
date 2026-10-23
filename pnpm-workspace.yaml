@@ -1,0 +1,9 @@
+packages:
+  - 'packages/**'
+  - '!packages/**/.venv/**'
+  - '!packages/web/.next/**'
+
+minimumReleaseAge: 0
+
+allowBuilds:
+  unrs-resolver: false
