@@ -1,83 +1,98 @@
-# Grobid CLI
+# grobid-cli
 
-![Grobid CLI](assets/og/og.png)
+**Convert PDF articles to Markdown via GROBID TEI XML — making PDFs AI-friendly on your own machine.**
 
-Convert PDF articles to Markdown so AI can work better with them. Built upon [GROBID](https://github.com/grobidOrg).
+grobid-cli is a local, full-stack document-conversion studio. Drop PDFs into a `pdf/` directory, run the `grobid` command, and get clean, structured Markdown with rich metadata in YAML frontmatter — plus TEI XML intermediates. GROBID starts automatically in Docker on port 8070, and an optional Next.js web app offers a UI for upload-and-convert. Everything runs locally via Docker Compose — no cloud account or infrastructure setup.
+
+[📄 Documentation](docs/index.html) · [🚀 Quick Start](#get-started) · [🔍 See It In Action](#see-it-in-action)
+
+![grobid-cli](assets/og/og.png)
 
 ## The Problem
 
-AI models struggle to extract clean, structured content from PDFs. Raw PDFs are messy — headers, footers, citations, tables, and figures make it hard for LLMs to parse and reason about academic papers or documents.
+AI models struggle to extract clean, structured content from PDFs. Raw PDFs are messy — headers, footers, citations, tables, and figures make it hard for LLMs to parse and reason about academic papers or documents. Raw text extraction loses structure, citations break context, and formatting confuses models.
+
+A useful local conversion tool needs to make it possible to:
+
+- Drop PDFs into a `pdf/` directory and convert them in one command.
+- Auto-start GROBID in Docker if it is not already running.
+- Extract title, authors, journal, year, volume, issue, pages, and DOI as YAML frontmatter.
+- Preserve abstract, article sections, references, tables, lists, and formulas.
+- Convert resumably: skip TEI and Markdown files that already exist.
+- Run the whole system with Docker Compose: GROBID service plus optional web UI.
+
+grobid-cli brings these workflows together in one coherent application.
 
 ## The Solution
 
-grobid cli uses [GROBID](https://github.com/grobidOrg) (GeneRation Of BIbliographic Data) to extract structured content from PDFs and convert them to clean Markdown with rich metadata in frontmatter. This makes documents AI-friendly and easy to process.
+grobid-cli provides a focused, local-first workflow: drop PDFs into `pdf/`, run `grobid`, review the Markdown in `md/` (with TEI XML in `tei/`). It uses GROBID's state-of-the-art PDF parsing to produce clean, structured Markdown that LLMs can understand and reason about effectively, behind one `pdf/` → `tei/` → `md/` pipeline, with metadata captured as YAML frontmatter. Everything runs locally via Docker Compose — no third-party services, no account creation.
 
 ## Features
 
-- **PDF → TEI → Markdown**: Full conversion pipeline using GROBID's TEI XML extraction
-- **Auto-starts GROBID**: Automatically launches a GROBID Docker container if not already running
-- **Rich metadata**: Extracts title, authors, journal, year, volume, issue, pages, DOI and adds them as YAML frontmatter
-- **Structured output**: Preserves abstract, article sections, references, tables, lists, and formulas
-- **Simple CLI**: One command to convert all PDFs in `pdf/` directory
-- **Resumable**: Skips already converted TEI/XML and Markdown files
+- **PDF → TEI → Markdown** — Full conversion pipeline using GROBID's TEI XML extraction via `grobid-client-python` (`processFulltextDocument`).
+- **Auto-starts GROBID** — Automatically launches the `grobid/grobid:0.9.1-crf` Docker container on port 8070 if not already running.
+- **Rich metadata** — Extracts title, authors, journal, year, volume, issue, pages, DOI, and DOI link and adds them as YAML frontmatter.
+- **Structured output** — Preserves abstract, article sections, references, tables, lists, and figures.
+- **Simple CLI** — One command (`grobid`) converts all PDFs in `pdf/` to TEI in `tei/` and Markdown in `md/`.
+- **Resumable** — Skips already-converted TEI/XML and Markdown files; auto-creates directories.
 
-## Quick Start
+## Key Benefits
+
+- **Local-first & private** — Convert on your own machine. Your documents never leave your environment.
+- **PDFs to Markdown in minutes** — One command turns a folder of PDFs into LLM-ready Markdown with metadata.
+- **Honest conversion** — GROBID's TEI XML is the intermediate format; Markdown renders TEI faithfully with no information loss layer.
+- **Reproducible by design** — Every run records data directory, ports, image, container name, and library versions.
+- **Developer-friendly** — Python 3.15 CLI (`uv`/`setuptools`), Next.js web UI, Docker Compose topology, `ruff`/`mypy`/`pytest` tooling.
+
+## See It in Action
+
+![Grobid CLI Demo](assets/demo/demo.png)
+
+Or read the full walkthrough in [`docs/index.html`](docs/index.html).
+
+## Get Started
+
+The fastest way to run grobid-cli locally:
 
 ### Prerequisites
 
-- [Docker](https://www.docker.com/) (for auto-starting GROBID)
-- Python 3.15
+- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) v2
+- [Python 3.15.1](https://www.python.org/) (for source install)
 
-### Installation
+### Run the stack
 
-#### Option 1: Prebuilt binary
-
-```bash
-# Download the latest binary
-curl -fsSL https://github.com/hieudoanm/grobid-cli/releases/download/latest/grobid -o /usr/local/bin/grobid
-chmod +x /usr/local/bin/grobid
+```sh
+docker compose up --build
 ```
 
-Or use the install script (checks for Docker and prompts to install if missing):
+This starts GROBID on port 8070 and the optional web app on port 3000.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/hieudoanm/grobid-cli/master/scripts/install.sh | bash
+### Open the app
+
+| Service   | URL                              |
+| --------- | -------------------------------- |
+| GROBID    | <http://127.0.0.1:8070>          |
+| Web app   | <http://127.0.0.1:3000>          |
+
+Stop and clean up:
+
+```sh
+docker compose down -v
 ```
 
-#### Option 2: From source
-
-```bash
-pip install -e .
-# or
-uv pip install -e .
-```
-
-#### Docker
-
-Grobid CLI requires Docker to run the GROBID service. Install Docker separately:
-
-- **macOS**: [Docker Desktop for Mac](https://docs.docker.com/docker-mac/install/) or `brew install --cask docker`
-- **Linux**:
-  - Arch: `sudo pacman -S docker docker-compose`
-  - Debian/Ubuntu: `sudo apt-get install -y docker.io docker-compose`
-  - RHEL/Fedora: `sudo dnf install -y docker docker-compose`
-- **Windows**: [Docker Desktop for Windows](https://docs.docker.com/docker-windows/install/)
-
-### Usage
+### CLI usage
 
 1. Put your PDFs in a `pdf/` directory
 2. Run the converter
 3. Get TEI XML in `tei/` and Markdown in `md/`
 
-![Demo](assets/demo/demo.png)
-
-```bash
+```sh
 grobid
 ```
 
 Or set a custom data directory:
 
-```bash
+```sh
 GROBID_DATA_DIR=/path/to/data grobid
 ```
 
@@ -108,7 +123,7 @@ doi_link: "https://doi.org/10.1234/example"
 ...
 ```
 
-## Directory Structure
+### Directory Structure
 
 ```
 your-project/
@@ -117,38 +132,65 @@ your-project/
 └── md/           # Output Markdown files
 ```
 
-## Environment Variables
+### Installation
 
-| Variable                                | Default                   | Description                                     |
-| --------------------------------------- | ------------------------- | ----------------------------------------------- |
-| `GROBID_DATA_DIR` / `ARTICLES_DATA_DIR` | Current directory         | Data directory containing `pdf/`, `tei/`, `md/` |
-| `GROBID_PORT`                           | `8070`                    | Port for GROBID server                          |
-| `GROBID_IMAGE`                          | `grobid/grobid:0.9.1-crf` | Docker image for GROBID                         |
-| `GROBID_CONTAINER`                      | `grobid-cli`              | Docker container name                           |
-
-## Development
+#### Option 1: Prebuilt binary
 
 ```bash
-make lint    # Run linters
-make format  # Format code
-make test    # Run tests
-make build   # Build binary with PyInstaller
+# Download the latest binary
+curl -fsSL https://github.com/hieudoanm/grobid-cli/releases/download/latest/grobid -o /usr/local/bin/grobid
+chmod +x /usr/local/bin/grobid
 ```
 
-### Assets
-
-Generate PNG assets from SVG sources:
+Or use the install script (checks for Docker and prompts to install if missing):
 
 ```bash
-bash assets/svg-to-png.sh assets
+curl -fsSL https://raw.githubusercontent.com/hieudoanm/grobid-cli/master/packages/cli/scripts/install.sh | bash
 ```
 
-## Why Grobid CLI?
+#### Option 2: From source
 
-The problem: AI does not work well with PDFs. Raw PDF text extraction loses structure, citations break context, and formatting confuses models.
+```bash
+pip install -e .
+# or
+uv pip install -e .
+```
 
-The solution: Grobid CLI leverages GROBID's state-of-the-art PDF parsing to produce clean, structured Markdown that LLMs can understand and reason about effectively.
+## Use Cases
+
+- **Research paper ingestion** — Turn PDF corpora into LLM-ready Markdown with citation metadata.
+- **Bibliography extraction** — Pull structured references and DOI links from academic PDFs.
+- **Local document processing** — Keep sensitive documents on-device while converting to structured Markdown.
+- **LLM-ready corpora** — Feed clean Markdown (not raw PDF text) into retrieval-augmented generation pipelines.
+
+## Why This Project?
+
+- **Focused scope** — Does one thing well: convert PDFs to Markdown via GROBID TEI XML. No AutoML bloat.
+- **Transparent** — Clear pipeline (PDF → TEI → Markdown), TEI intermediates preserved, metadata as frontmatter.
+- **Local-first** — Runs entirely on your machine via Docker Compose; no vendor lock-in or external dependencies.
+- **Production-minded** — Real Python CLI + Next.js implementation with tests, linting, type-checking, and binary releases.
+
+## Project Status and Trust
+
+- **Maturity:** Software demonstration (beta). PDF → TEI → Markdown conversion is implemented, including auto-starting GROBID, resumable conversion, and YAML frontmatter metadata.
+- **License:** [MIT License](LICENSE) — see the `LICENSE` file for full terms.
+- **Tech stack:** Python 3.15.1, `uv`, `setuptools`, `grobid-client-python==0.2.1`, `lxml==6.1.3`, PyInstaller (binary builds), Next.js 16 (web UI), Docker Compose.
+- **Testing:** `pytest`, `ruff` (lint + format), `mypy` (type checking), `pre-commit` hooks, GitHub Actions CI.
+
+## Community and Contributions
+
+Contributions, bug reports, and feature suggestions are welcome. See existing resources:
+
+- [AGENTS.md](AGENTS.md) — project overview, architecture, environment variables, tech stack, build & test
+- [packages/cli/README.md](packages/cli/README.md) — CLI tool for batch conversion
+- [packages/web/README.md](packages/web/README.md) — Next.js web app for upload-and-convert
+
+To report issues or propose changes, open an issue or pull request in this repository.
+
+## Call to Action
+
+**[Get Started](#get-started)** — Run grobid-cli locally in minutes and convert your first PDF.
 
 ## License
 
-[MIT License](LICENSE)
+This project is licensed under the [MIT License](LICENSE).
