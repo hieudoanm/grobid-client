@@ -3,7 +3,7 @@ name = "grobid-cli"
 version = "0.0.1"
 description = "Convert PDF articles to Markdown via GROBID TEI XML (PDF → TEI → MD)"
 readme = "README.md"
-requires-python = "==3.15.1"
+requires-python = "==3.15.2"
 dependencies = [
     "grobid-client-python==0.2.1",
     "lxml==6.1.3",
