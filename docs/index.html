@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Grobid CLI · docs</title>
 
-    <link rel="stylesheet" href="/grobid-cli/assets/styles.css" />
+    <link rel="stylesheet" href="/grobid-client/assets/styles.css" />
     <link
       rel="icon"
-      href="/grobid-cli/assets/favicon.ico"
+      href="/grobid-client/assets/favicon.ico"
       type="image/x-icon" />
   </head>
   <body>
@@ -26,7 +26,7 @@
           <span class="visually-hidden">Menu</span>
         </button>
 
-        <a class="header__title" href="/grobid-cli/">docs</a>
+        <a class="header__title" href="/grobid-client/">docs</a>
         <div class="header__actions">
           <label class="header__search" for="search">
             <span class="visually-hidden">Search</span>
@@ -36,7 +36,7 @@
               placeholder="Search"
               autocomplete="off"
               data-search
-              data-search-index="/grobid-cli/assets/search-index.json" />
+              data-search-index="/grobid-client/assets/search-index.json" />
           </label>
           <button class="header__theme" type="button" data-theme-toggle>
             <span class="visually-hidden">Toggle colour theme</span>
@@ -55,7 +55,7 @@
           <li class="nav__item">
             <a
               class="nav__link nav__link--current"
-              href="/grobid-cli/"
+              href="/grobid-client/"
               aria-current="page"
               >Grobid CLI</a
             >
@@ -202,7 +202,7 @@ doi_link: &quot;https://doi.org/10.1234/example&quot;
               </tr>
               <tr>
                 <td><code>GROBID_CONTAINER</code></td>
-                <td><code>grobid-cli</code></td>
+                <td><code>grobid-client</code></td>
                 <td>Docker container name</td>
               </tr>
             </tbody>
@@ -213,7 +213,7 @@ make format  # Format code
 make test    # Run tests
 make build   # Build binary with PyInstaller
 </code></pre>
-          <h2 id="why-grobid-cli">Why Grobid CLI?</h2>
+          <h2 id="why-grobid-client">Why Grobid CLI?</h2>
           <p>
             The problem: AI does not work well with PDFs. Raw PDF text
             extraction loses structure, citations break context, and formatting
@@ -280,7 +280,7 @@ make build   # Build binary with PyInstaller
             </li>
 
             <li class="outline__item outline__item--2">
-              <a class="outline__link" href="#why-grobid-cli"
+              <a class="outline__link" href="#why-grobid-client"
                 >Why Grobid CLI?</a
               >
             </li>
@@ -297,7 +297,7 @@ make build   # Build binary with PyInstaller
       <p>Built with pagify</p>
     </footer>
 
-    <script src="/grobid-cli/assets/script.js" defer></script>
-    <script src="/grobid-cli/assets/search.js" defer></script>
+    <script src="/grobid-client/assets/script.js" defer></script>
+    <script src="/grobid-client/assets/search.js" defer></script>
   </body>
 </html>
