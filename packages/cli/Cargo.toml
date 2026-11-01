@@ -10,7 +10,7 @@ authors = ["Hieu Doan <hieu.doan.professional@gmail.com>"]
 
 [workspace.dependencies]
 clap = { version = "4", features = ["derive"] }
-reqwest = { version = "0.12", features = ["json", "multipart"] }
+reqwest = { version = "0.13", features = ["json", "multipart"] }
 tokio = { version = "1", features = ["full"] }
 roxmltree = "0.21"
 serde = { version = "1", features = ["derive"] }
