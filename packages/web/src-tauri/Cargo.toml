@@ -15,14 +15,14 @@ name = "app_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
-tauri-build = { version = "2.7.4" }
+tauri-build = { version = "=2.7.4" }
 
 [dependencies]
-serde_json = "1.0"
-serde = { version = "1.0", features = ["derive"] }
-log = "0.4"
-tauri = { version = "2.12.5" }
-tauri-plugin-log = "2"
+serde_json = "=1.0.154"
+serde = { version = "=1.0.229", features = ["derive"] }
+log = "=0.4.35"
+tauri = { version = "=2.12.5" }
+tauri-plugin-log = "=2.10.1"
 
 grobid-core = { path = "../../../packages/cli/crates/core" }
-tokio = { version = "1", features = ["full"] }
+tokio = { version = "=1.54.1", features = ["full"] }
